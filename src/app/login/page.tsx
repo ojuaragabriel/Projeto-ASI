@@ -39,11 +39,11 @@ export default function LoginPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="username">Usuário</Label>
-              <Input id="username" name="username" type="text" placeholder="admin" required defaultValue="admin" />
+              <Input id="username" name="username" type="text" placeholder="Qualquer usuário" required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Senha</Label>
-              <Input id="password" name="password" type="password" placeholder="admin" required defaultValue="admin" />
+              <Input id="password" name="password" type="password" placeholder="Qualquer senha" required />
             </div>
             {errorMessage && (
               <Alert variant="destructive">

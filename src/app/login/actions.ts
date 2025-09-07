@@ -10,8 +10,8 @@ export async function authenticate(
   try {
     const { username, password } = Object.fromEntries(formData.entries());
 
-    // Hardcoded credentials for MVP
-    if (username === 'admin' && password === 'admin') {
+    // MVP Login: accept any non-empty credentials
+    if (username && password) {
       const cookieStore = cookies();
       cookieStore.set('session', 'ok', { 
           httpOnly: true, 
@@ -21,7 +21,7 @@ export async function authenticate(
       });
       redirect('/escolher-materias');
     } else {
-      return 'Usuário ou senha inválidos.';
+      return 'Usuário e senha são obrigatórios.';
     }
   } catch (error) {
      if ((error as Error).message.includes('NEXT_REDIRECT')) {

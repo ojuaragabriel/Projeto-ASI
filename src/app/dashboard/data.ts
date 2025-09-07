@@ -11,7 +11,7 @@ export const professorPreferences = [
 export const allocationResults = [
   { id: 'AR01', name: 'Cálculo I', professor: 'Dr. João Silva', status: 'Alocado' },
   { id: 'AR02', name: 'Inteligência Artificial', professor: 'Dra. Ana Pereira', status: 'Alocado' },
-  { id_user: 'AR03', name: 'Engenharia de Software', professor: 'Você', status: 'Alocado para você' },
+  { id: 'AR03', name: 'Engenharia de Software', professor: 'Você', status: 'Alocado para você' },
   { id: 'AR04', name: 'Física Quântica', professor: null, status: 'Não alocado' },
   { id: 'AR05', name: 'Banco de Dados', professor: 'Dr. Carlos Lima', status: 'Alocado' },
 ];
