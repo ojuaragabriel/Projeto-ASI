@@ -35,10 +35,16 @@ export default function CatalogoDisciplinasPage() {
     const [disciplinas, setDisciplinas] = React.useState<Disciplina[]>(initialDisciplinas);
     const [isFormOpen, setIsFormOpen] = React.useState(false);
     const [editingDisciplina, setEditingDisciplina] = React.useState<Disciplina | null>(null);
+    const [formDepartamentoId, setFormDepartamentoId] = React.useState<string | null>(null);
 
     // Mock: O diretor logado é de Ciências Exatas
     const meuDepartamentoId = 'd01'; 
     const meuDepto = departamentos.find(d => d.id === meuDepartamentoId);
+    
+    React.useEffect(() => {
+        setFormDepartamentoId(editingDisciplina?.departamentoId || meuDepartamentoId);
+    }, [isFormOpen, editingDisciplina, meuDepartamentoId]);
+
 
     const handleAddOrEditDisciplina = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -74,7 +80,7 @@ export default function CatalogoDisciplinasPage() {
         }
     };
     
-    const selectedDeptoForForm = departamentos.find(d => d.id === (document.querySelector('[name="departamentoId"]') as HTMLSelectElement)?.value)
+    const selectedDeptoForForm = departamentos.find(d => d.id === formDepartamentoId);
 
     return (
         <div className="space-y-8">
@@ -140,7 +146,7 @@ export default function CatalogoDisciplinasPage() {
                 </CardContent>
             </Card>
 
-            <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+            <Dialog open={isFormOpen} onOpenChange={(isOpen) => { if (!isOpen) { setEditingDisciplina(null); } setIsFormOpen(isOpen); }}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>{editingDisciplina ? 'Editar' : 'Adicionar'} Disciplina</DialogTitle>
@@ -164,7 +170,7 @@ export default function CatalogoDisciplinasPage() {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="departamentoId">Departamento</Label>
-                                <Select name="departamentoId" required defaultValue={editingDisciplina?.departamentoId || meuDepartamentoId} disabled>
+                                <Select name="departamentoId" required value={formDepartamentoId || ''} onValueChange={setFormDepartamentoId} disabled>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Selecione o departamento" />
                                     </SelectTrigger>
@@ -178,12 +184,12 @@ export default function CatalogoDisciplinasPage() {
                            <div className="space-y-2">
                               <Label htmlFor="areaId">Área (opcional)</Label>
                               <Select name="areaId" defaultValue={editingDisciplina?.areaId}>
-                                  <SelectTrigger disabled={!meuDepto?.areas}>
+                                  <SelectTrigger disabled={!selectedDeptoForForm?.areas}>
                                       <SelectValue placeholder="Selecione a área" />
                                   </SelectTrigger>
                                   <SelectContent>
                                       <SelectItem value="">Nenhuma</SelectItem>
-                                      {meuDepto?.areas?.map(area => (
+                                      {selectedDeptoForForm?.areas?.map(area => (
                                           <SelectItem key={area.id} value={area.id}>{area.nome}</SelectItem>
                                       ))}
                                   </SelectContent>

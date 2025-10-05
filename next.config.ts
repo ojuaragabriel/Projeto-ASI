@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    serverActions: true,
+    serverActions: {},
   },
 };
 
