@@ -45,7 +45,6 @@ export interface Alocacao {
   disciplinaId: string;
   professorId: string | null;
   semestre: string;
-  status: 'alocada' | 'ofertada' | 'pendente';
 }
 
 export interface Horario {
@@ -124,22 +123,25 @@ export const disciplinas: Disciplina[] = [
 ];
 
 export const professores: Professor[] = [
-  { id: 'p01', nome: 'Dr. João Silva (Exatas)', departamentoId: 'd01', areaId: 'a03', minHoras: 8, maxHoras: 12 },
-  { id: 'p02', nome: 'Dra. Ana Pereira (Exatas)', departamentoId: 'd01', areaId: 'a04', minHoras: 10, maxHoras: 16 },
-  { id: 'p03', nome: 'Dr. Carlos Lima (Jurídicas)', departamentoId: 'd02', areaId: 'a01', minHoras: 8, maxHoras: 12 },
-  { id: 'p04', nome: 'Dra. Maria Costa (Jurídicas)', departamentoId: 'd02', areaId: 'a02', minHoras: 8, maxHoras: 12 },
-  { id: 'p05', nome: 'Dr. Pedro Martins (Letras)', departamentoId: 'd03', minHoras: 6, maxHoras: 10 },
-  { id: 'p06', nome: 'Você (Professor)', departamentoId: 'd01', areaId: 'a04', minHoras: 4, maxHoras: 8 },
+  { id: 'p01', nome: 'Dr. João Silva', departamentoId: 'd01', areaId: 'a03', minHoras: 8, maxHoras: 12 },
+  { id: 'p02', nome: 'Dra. Ana Pereira', departamentoId: 'd01', areaId: 'a04', minHoras: 10, maxHoras: 16 },
+  { id: 'p03', nome: 'Dr. Carlos Lima', departamentoId: 'd02', areaId: 'a01', minHoras: 8, maxHoras: 12 },
+  { id: 'p04', nome: 'Dra. Maria Costa', departamentoId: 'd02', areaId: 'a02', minHoras: 8, maxHoras: 12 },
+  { id: 'p05', nome: 'Dr. Pedro Martins', departamentoId: 'd03', minHoras: 6, maxHoras: 10 },
+  { id: 'p06', nome: 'Você', departamentoId: 'd01', areaId: 'a04', minHoras: 4, maxHoras: 8 },
 ];
 
 export const alocacoesIniciais: Alocacao[] = [
-    { disciplinaId: 'dis01', professorId: 'p01', semestre: '2025.1', status: 'alocada' },
-    { disciplinaId: 'dis02', professorId: 'p02', semestre: '2025.1', status: 'alocada' },
-    { disciplinaId: 'dis03', professorId: 'p06', semestre: '2025.1', status: 'alocada' },
-    { disciplinaId: 'dis05', professorId: 'p03', semestre: '2025.1', status: 'alocada' },
-    { disciplinaId: 'dis04', professorId: null, semestre: '2025.1', status: 'ofertada' },
-    { disciplinaId: 'dis07', professorId: 'p02', semestre: '2025.1', status: 'alocada' },
-    { disciplinaId: 'dis08', professorId: null, semestre: '2025.1', status: 'ofertada' },
+    { disciplinaId: 'dis01', professorId: 'p01', semestre: '2025.1' },
+    { disciplinaId: 'dis02', professorId: 'p02', semestre: '2025.1' },
+    { disciplinaId: 'dis03', professorId: 'p06', semestre: '2025.1' }, // Alocada para 'Você'
+    { disciplinaId: 'dis07', professorId: 'p06', semestre: '2025.1' }, // Alocada para 'Você'
+    { disciplinaId: 'dis05', professorId: 'p03', semestre: '2025.1' },
+    { disciplinaId: 'dis04', professorId: null, semestre: '2025.1' },
+    { disciplinaId: 'dis08', professorId: null, semestre: '2025.1' },
+
+    // Alocações para 2025.2 para teste do seletor de semestre
+    { disciplinaId: 'dis09', professorId: 'p06', semestre: '2025.2' },
 ];
 
 export const horariosIniciais: Horario[] = [
@@ -149,6 +151,7 @@ export const horariosIniciais: Horario[] = [
     { id: 'h04', disciplinaId: 'dis03', turma: 'T1', semestre: '2025.1', dia: 'Sexta', slot: '14:00-16:00' },
     { id: 'h05', disciplinaId: 'dis05', turma: 'T1', semestre: '2025.1', dia: 'Segunda', slot: '14:00-16:00' },
     { id: 'h06', disciplinaId: 'dis07', turma: 'T1', semestre: '2025.1', dia: 'Quinta', slot: '16:00-18:00' },
+    { id: 'h07', disciplinaId: 'dis09', turma: 'T1', semestre: '2025.2', dia: 'Terça', slot: '08:00-10:00' },
 ];
 
 export const preferenciasIniciais: Preferencia[] = [
