@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { useFormStatus } from 'react-dom';
+import { useFormStatus, useFormState } from 'react-dom';
 import { AlertTriangle, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -34,7 +34,7 @@ function LoginButton() {
 }
 
 export default function LoginPage() {
-  const [errorMessage, dispatch] = React.useActionState(authenticate, undefined);
+  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
@@ -56,8 +56,9 @@ export default function LoginPage() {
                 id="name"
                 name="name"
                 type="text"
-                placeholder="Seu nome de usuário"
+                placeholder="Qualquer usuário"
                 required
+                defaultValue="user"
               />
             </div>
             <div className="space-y-2">
@@ -68,6 +69,7 @@ export default function LoginPage() {
                 type="password"
                 placeholder="Use 'admin'"
                 required
+                defaultValue="admin"
               />
             </div>
             <div className="space-y-2">
@@ -78,8 +80,8 @@ export default function LoginPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="professor">Professor</SelectItem>
+                  <SelectItem value="coordenador">Coordenador</SelectItem>
                   <SelectItem value="colegiado">Colegiado</SelectItem>
-                  <SelectItem value="departamento">Departamento</SelectItem>
                 </SelectContent>
               </Select>
             </div>

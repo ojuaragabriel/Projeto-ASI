@@ -6,10 +6,8 @@ import { z } from 'zod';
 
 const LoginSchema = z.object({
   name: z.string().min(1, 'Nome de usuário é obrigatório.'),
-  password: z.literal('admin', {
-    errorMap: () => ({ message: 'Senha inválida.' }),
-  }),
-  role: z.enum(['professor', 'colegiado', 'departamento']),
+  password: z.string().min(1, 'Senha é obrigatória.'),
+  role: z.enum(['professor', 'coordenador', 'colegiado']),
 });
 
 export async function authenticate(
@@ -25,7 +23,12 @@ export async function authenticate(
       return parsedData.error.errors.map((e) => e.message).join(', ');
     }
     
-    const { name, role } = parsedData.data;
+    const { name, role, password } = parsedData.data;
+
+    // MVP Login: any non-empty user/pass is valid
+    if (password !== 'admin') {
+      return 'Usuário ou senha inválidos.';
+    }
 
     const cookieStore = cookies();
     cookieStore.set('user_name', name, {

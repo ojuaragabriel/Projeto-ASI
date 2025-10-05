@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const protectedRoutes = ['/dashboard', '/professor', '/colegiado', '/departamento'];
+const protectedRoutes = ['/dashboard', '/professor', '/coordenador', '/colegiado'];
 const publicRoutes = ['/login'];
 
 export function middleware(request: NextRequest) {
@@ -24,6 +24,7 @@ export function middleware(request: NextRequest) {
     }
 
     // If trying to access a protected route that is not their own, redirect
+    // Exception for /dashboard which is the generic entry point
     if (isProtectedRoute && !pathname.startsWith(`/${role}`) && pathname !== '/dashboard') {
        return NextResponse.redirect(new URL(`/${role}`, request.url));
     }

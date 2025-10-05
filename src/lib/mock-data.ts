@@ -1,3 +1,4 @@
+import { AreaChart } from "lucide-react";
 
 export const SEMESTERS = ['2025.1', '2025.2', '2026.1'];
 
@@ -21,13 +22,14 @@ export interface Curso {
   id: string;
   nome: string;
   colegiadoId: string;
+  departamentoId: string; // Departamento principal do curso
 }
 
 export interface Disciplina {
   id: string;
   codigo: string;
   nome: string;
-  cargaHoraria: number;
+  cargaHoraria: number; // Carga horária semanal
   departamentoId: string;
   areaId?: string;
 }
@@ -57,17 +59,33 @@ export interface Horario {
     slot: '08:00-10:00' | '10:00-12:00' | '14:00-16:00' | '16:00-18:00';
 }
 
+export interface Preferencia {
+    professorId: string;
+    semestre: string;
+    disciplinasIds: string[];
+    justificativa?: string;
+}
+
+export interface Oferta {
+    cursoId: string;
+    disciplinaId: string;
+    semestre: string;
+}
+
+
 // --- MOCK DATA ---
+
+export const areas: AreaInterna[] = [
+    { id: 'a01', nome: 'Direito Civil' },
+    { id: 'a02', nome: 'Direito Trabalhista' },
+]
 
 export const departamentos: Departamento[] = [
   { id: 'd01', nome: 'Departamento de Ciências Exatas e Tecnológicas' },
   {
     id: 'd02',
     nome: 'Departamento de Ciências Jurídicas',
-    areas: [
-      { id: 'a01', nome: 'Direito Civil' },
-      { id: 'a02', nome: 'Direito Trabalhista' },
-    ],
+    areas: areas,
   },
   { id: 'd03', nome: 'Departamento de Letras e Artes' },
 ];
@@ -78,8 +96,8 @@ export const colegiados: Colegiado[] = [
 ];
 
 export const cursos: Curso[] = [
-    { id: 'cur01', nome: 'Engenharia de Computação', colegiadoId: 'c01' },
-    { id: 'cur02', nome: 'Direito', colegiadoId: 'c02' },
+    { id: 'cur01', nome: 'Engenharia de Computação', colegiadoId: 'c01', departamentoId: 'd01' },
+    { id: 'cur02', nome: 'Direito', colegiadoId: 'c02', departamentoId: 'd02' },
 ];
 
 
@@ -123,8 +141,23 @@ export const horariosIniciais: Horario[] = [
     { id: 'h05', disciplinaId: 'dis05', turma: 'T1', semestre: '2025.1', dia: 'Segunda', slot: '14:00-16:00' },
 ];
 
-// Adicionando um tipo para as áreas, já que estava faltando
-export const areas: AreaInterna[] = [
-    { id: 'a01', nome: 'Direito Civil' },
-    { id: 'a02', nome: 'Direito Trabalhista' },
-]
+export const preferenciasIniciais: Preferencia[] = [
+    { professorId: 'p06', semestre: '2025.1', disciplinasIds: ['dis09', 'dis10'], justificativa: 'Tenho mais afinidade com redes e IA.' },
+];
+
+export const ofertasIniciais: Oferta[] = [
+    // Ofertas para Eng. de Computação em 2025.1
+    { cursoId: 'cur01', disciplinaId: 'dis01', semestre: '2025.1'},
+    { cursoId: 'cur01', disciplinaId: 'dis02', semestre: '2025.1'},
+    { cursoId: 'cur01', disciplinaId: 'dis03', semestre: '2025.1'},
+    { cursoId: 'cur01', disciplinaId: 'dis07', semestre: '2025.1'},
+    { cursoId: 'cur01', disciplinaId: 'dis09', semestre: '2025.1'},
+    { cursoId: 'cur01', disciplinaId: 'dis10', semestre: '2025.1'},
+    // Disciplina de outro depto ofertada
+    { cursoId: 'cur01', disciplinaId: 'dis04', semestre: '2025.1'},
+
+    // Ofertas para Direito em 2025.1
+    { cursoId: 'cur02', disciplinaId: 'dis04', semestre: '2025.1'},
+    { cursoId: 'cur02', disciplinaId: 'dis05', semestre: '2025.1'},
+    { cursoId: 'cur02', disciplinaId: 'dis08', semestre: '2025.1'},
+];
