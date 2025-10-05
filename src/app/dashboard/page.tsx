@@ -1,5 +1,20 @@
+'use client';
+import { useUser } from '@/hooks/use-user';
 import { redirect } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function DashboardRootPage() {
-  redirect('/escolher-materias');
+  const { user, isLoading } = useUser();
+
+  useEffect(() => {
+    if (!isLoading && user?.role) {
+      redirect(`/${user.role}`);
+    }
+  }, [user, isLoading]);
+
+  return (
+    <div className="flex h-full w-full items-center justify-center">
+      <p>Carregando...</p>
+    </div>
+  );
 }

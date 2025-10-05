@@ -1,32 +1,39 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-const protectedRoutes = ['/escolher-materias', '/resultado-materias', '/minhas-materias', '/dashboard'];
+const protectedRoutes = ['/dashboard', '/professor', '/colegiado', '/departamento'];
 const publicRoutes = ['/login'];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const sessionCookie = request.cookies.get('session');
+  const role = request.cookies.get('role')?.value;
+  const userName = request.cookies.get('user_name')?.value;
 
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
 
-  // If the user is trying to access a protected route without a session, redirect to login
-  if (isProtectedRoute && !sessionCookie) {
+  // If the user is not logged in and tries to access a protected route
+  if (isProtectedRoute && (!role || !userName)) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  // If the user is logged in and tries to access the login page, redirect to the dashboard
-  if (sessionCookie && publicRoutes.some(route => pathname.startsWith(route))) {
-    return NextResponse.redirect(new URL('/escolher-materias', request.url));
+  // If the user is logged in, handle routing
+  if (role && userName) {
+    // If trying to access login page, redirect to their dashboard
+    if (publicRoutes.some(route => pathname.startsWith(route))) {
+      return NextResponse.redirect(new URL(`/${role}`, request.url));
+    }
+
+    // If trying to access a protected route that is not their own, redirect
+    if (isProtectedRoute && !pathname.startsWith(`/${role}`) && pathname !== '/dashboard') {
+       return NextResponse.redirect(new URL(`/${role}`, request.url));
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  // Matcher to specify which routes the middleware should run on.
-  // This avoids running the middleware on static files and other assets.
   matcher: [
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
-}
+};
