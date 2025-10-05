@@ -1,3 +1,4 @@
+
 export const SEMESTERS = ['2025.1', '2025.2', '2026.1'];
 
 export interface AreaInterna {
@@ -88,7 +89,7 @@ export const disciplinas: Disciplina[] = [
   { id: 'dis03', codigo: 'CET003', nome: 'Engenharia de Software', cargaHoraria: 4, departamentoId: 'd01' },
   { id: 'dis04', codigo: 'DCJ001', nome: 'Introdução ao Direito', cargaHoraria: 4, departamentoId: 'd02' },
   { id: 'dis05', codigo: 'DCJ002', nome: 'Direito Civil I', cargaHoraria: 4, departamentoId: 'd02', areaId: 'a01' },
-  { id: 'dis06', codigo DLA001', nome: 'Teoria da Literatura', cargaHoraria: 4, departamentoId: 'd03' },
+  { id: 'dis06', codigo: 'DLA001', nome: 'Teoria da Literatura', cargaHoraria: 4, departamentoId: 'd03' },
   { id: 'dis07', codigo: 'CET004', nome: 'Banco de Dados', cargaHoraria: 4, departamentoId: 'd01' },
   { id: 'dis08', codigo: 'DCJ003', nome: 'Direito do Trabalho I', cargaHoraria: 4, departamentoId: 'd02', areaId: 'a02' },
   { id: 'dis09', codigo: 'CET005', nome: 'Redes de Computadores', cargaHoraria: 4, departamentoId: 'd01' },
@@ -121,3 +122,9 @@ export const horariosIniciais: Horario[] = [
     { id: 'h04', disciplinaId: 'dis03', turma: 'T1', semestre: '2025.1', dia: 'Sexta', slot: '14:00-16:00' },
     { id: 'h05', disciplinaId: 'dis05', turma: 'T1', semestre: '2025.1', dia: 'Segunda', slot: '14:00-16:00' },
 ];
+
+// Adicionando um tipo para as áreas, já que estava faltando
+export const areas: AreaInterna[] = [
+    { id: 'a01', nome: 'Direito Civil' },
+    { id: 'a02', nome: 'Direito Trabalhista' },
+]
