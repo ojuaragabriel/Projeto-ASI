@@ -71,11 +71,13 @@ export default function ProfessorLayout({
     <SidebarProvider>
       <Sidebar variant="inset" side="left" collapsible="icon">
         <SidebarHeader className="p-4">
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <Logo className="w-7 h-7 text-primary" />
-            <span className="text-lg font-semibold text-primary group-data-[collapsible=icon]:hidden">
-              AcademicFlow
-            </span>
+          <Link href="/dashboard">
+            <div className="flex items-center gap-2">
+              <Logo className="w-7 h-7 text-primary" />
+              <span className="text-lg font-semibold text-primary group-data-[collapsible=icon]:hidden">
+                AcademicFlow
+              </span>
+            </div>
           </Link>
         </SidebarHeader>
         <SidebarContent>
