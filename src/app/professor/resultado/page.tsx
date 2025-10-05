@@ -12,7 +12,6 @@ import {
     disciplinas as allDisciplinas,
     professores,
 } from '@/lib/mock-data';
-import DashboardLayout from '../layout';
 import { cn } from '@/lib/utils';
 
 type StatusFiltro = 'all' | 'alocado-mim' | 'alocado-outro' | 'nao-alocado';
@@ -57,71 +56,69 @@ export default function ResultadoPage({ selectedSemester }: { selectedSemester: 
     };
 
     return (
-        <DashboardLayout>
-            <div className="space-y-8">
-                <div>
-                    <h1 className="text-3xl font-bold">Resultado da Alocação de Matérias ({selectedSemester})</h1>
-                    <p className="text-muted-foreground">Veja quais professores foram alocados para cada disciplina.</p>
-                </div>
-                
-                <Card>
-                    <CardHeader>
-                        <div className="flex justify-between items-center">
-                             <CardTitle>Disciplinas e Alocações</CardTitle>
-                             <div className="flex items-center space-x-2">
-                                <Input 
-                                    placeholder="Filtrar por disciplina..." 
-                                    className="max-w-sm" 
-                                    value={searchTerm}
-                                    onChange={e => setSearchTerm(e.target.value)}
-                                />
-                                <Select value={statusFiltro} onValueChange={(v) => setStatusFiltro(v as StatusFiltro)}>
-                                    <SelectTrigger className="w-[220px]">
-                                        <SelectValue placeholder="Filtrar por status" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="all">Todos os Status</SelectItem>
-                                        <SelectItem value="alocado-mim">Alocado para você</SelectItem>
-                                        <SelectItem value="alocado-outro">Alocado (Outro)</SelectItem>
-                                        <SelectItem value="nao-alocado">Não alocado</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Disciplina</TableHead>
-                                    <TableHead>Professor Alocado</TableHead>
-                                    <TableHead>Status</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {alocacoesDoSemestre.map(({ disciplina, professor, status }) => (
-                                    <TableRow key={disciplina.id} className={cn(status === 'Alocado para você' && 'bg-primary/10')}>
-                                        <TableCell className="font-medium">{disciplina.nome} ({disciplina.codigo})</TableCell>
-                                        <TableCell>{professor?.nome || <span className="text-muted-foreground">Ninguém</span>}</TableCell>
-                                        <TableCell>
-                                            <Badge variant={getBadgeVariant(status)}>
-                                                {status}
-                                            </Badge>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                                 {alocacoesDoSemestre.length === 0 && (
-                                    <TableRow>
-                                        <TableCell colSpan={3} className="text-center py-10 text-muted-foreground">
-                                            Nenhuma disciplina encontrada para os filtros selecionados.
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
+        <div className="space-y-8">
+            <div>
+                <h1 className="text-3xl font-bold">Resultado da Alocação de Matérias ({selectedSemester})</h1>
+                <p className="text-muted-foreground">Veja quais professores foram alocados para cada disciplina.</p>
             </div>
-        </DashboardLayout>
+            
+            <Card>
+                <CardHeader>
+                    <div className="flex justify-between items-center">
+                         <CardTitle>Disciplinas e Alocações</CardTitle>
+                         <div className="flex items-center space-x-2">
+                            <Input 
+                                placeholder="Filtrar por disciplina..." 
+                                className="max-w-sm" 
+                                value={searchTerm}
+                                onChange={e => setSearchTerm(e.target.value)}
+                            />
+                            <Select value={statusFiltro} onValueChange={(v) => setStatusFiltro(v as StatusFiltro)}>
+                                <SelectTrigger className="w-[220px]">
+                                    <SelectValue placeholder="Filtrar por status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">Todos os Status</SelectItem>
+                                    <SelectItem value="alocado-mim">Alocado para você</SelectItem>
+                                    <SelectItem value="alocado-outro">Alocado (Outro)</SelectItem>
+                                    <SelectItem value="nao-alocado">Não alocado</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Disciplina</TableHead>
+                                <TableHead>Professor Alocado</TableHead>
+                                <TableHead>Status</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {alocacoesDoSemestre.map(({ disciplina, professor, status }) => (
+                                <TableRow key={disciplina.id} className={cn(status === 'Alocado para você' && 'bg-primary/10')}>
+                                    <TableCell className="font-medium">{disciplina.nome} ({disciplina.codigo})</TableCell>
+                                    <TableCell>{professor?.nome || <span className="text-muted-foreground">Ninguém</span>}</TableCell>
+                                    <TableCell>
+                                        <Badge variant={getBadgeVariant(status)}>
+                                            {status}
+                                        </Badge>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                             {alocacoesDoSemestre.length === 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={3} className="text-center py-10 text-muted-foreground">
+                                        Nenhuma disciplina encontrada para os filtros selecionados.
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+        </div>
     );
 }

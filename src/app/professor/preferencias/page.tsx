@@ -16,7 +16,6 @@ import {
     preferenciasIniciais,
     Preferencia,
 } from '@/lib/mock-data';
-import DashboardLayout from '../layout';
 
 export default function PreferenciasPage({ selectedSemester }: { selectedSemester: string }) {
     const { toast } = useToast();
@@ -77,79 +76,77 @@ export default function PreferenciasPage({ selectedSemester }: { selectedSemeste
     };
 
     return (
-        <DashboardLayout>
-            <div className="space-y-8">
-                <div>
-                    <h1 className="text-3xl font-bold">Manifestação de Preferências ({selectedSemester})</h1>
-                    <p className="text-muted-foreground">Selecione as disciplinas que você tem interesse em lecionar.</p>
-                </div>
-                
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Disciplinas Disponíveis</CardTitle>
-                        <CardDescription>Marque as disciplinas de seu interesse para o próximo semestre.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-[50px]"></TableHead>
-                                    <TableHead>Nome</TableHead>
-                                    <TableHead>Código</TableHead>
-                                    <TableHead>Departamento/Área</TableHead>
-                                    <TableHead>Carga Semanal</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {disciplinasDisponiveis.map(disciplina => {
-                                    const depto = departamentos.find(d => d.id === disciplina.departamentoId);
-                                    const area = areas.find(a => a.id === disciplina.areaId);
-                                    return (
-                                        <TableRow key={disciplina.id}>
-                                            <TableCell>
-                                                <Checkbox
-                                                    checked={selectedDisciplinas.has(disciplina.id)}
-                                                    onCheckedChange={() => handleToggleDisciplina(disciplina.id)}
-                                                />
-                                            </TableCell>
-                                            <TableCell className="font-medium">{disciplina.nome}</TableCell>
-                                            <TableCell>{disciplina.codigo}</TableCell>
-                                            <TableCell>{depto?.nome}{area ? ` / ${area.nome}`: ''}</TableCell>
-                                            <TableCell>{disciplina.cargaHoraria}h</TableCell>
-                                        </TableRow>
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Justificativa (Opcional)</CardTitle>
-                        <CardDescription>
-                            Use este espaço para fornecer informações adicionais, como ordem de preferência ou outras observações.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Textarea 
-                            value={justificativa}
-                            onChange={(e) => setJustificativa(e.target.value)}
-                            placeholder="Ex: 1. Cálculo I, 2. Álgebra Linear..."
-                        />
-                    </CardContent>
-                </Card>
-
-                <div className="flex justify-end">
-                    <Button 
-                        size="lg"
-                        onClick={handleEnviar}
-                        disabled={selectedDisciplinas.size === 0}
-                    >
-                        Enviar Preferências ({selectedDisciplinas.size})
-                    </Button>
-                </div>
+        <div className="space-y-8">
+            <div>
+                <h1 className="text-3xl font-bold">Manifestação de Preferências ({selectedSemester})</h1>
+                <p className="text-muted-foreground">Selecione as disciplinas que você tem interesse em lecionar.</p>
             </div>
-        </DashboardLayout>
+            
+            <Card>
+                <CardHeader>
+                    <CardTitle>Disciplinas Disponíveis</CardTitle>
+                    <CardDescription>Marque as disciplinas de seu interesse para o próximo semestre.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[50px]"></TableHead>
+                                <TableHead>Nome</TableHead>
+                                <TableHead>Código</TableHead>
+                                <TableHead>Departamento/Área</TableHead>
+                                <TableHead>Carga Semanal</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {disciplinasDisponiveis.map(disciplina => {
+                                const depto = departamentos.find(d => d.id === disciplina.departamentoId);
+                                const area = areas.find(a => a.id === disciplina.areaId);
+                                return (
+                                    <TableRow key={disciplina.id}>
+                                        <TableCell>
+                                            <Checkbox
+                                                checked={selectedDisciplinas.has(disciplina.id)}
+                                                onCheckedChange={() => handleToggleDisciplina(disciplina.id)}
+                                            />
+                                        </TableCell>
+                                        <TableCell className="font-medium">{disciplina.nome}</TableCell>
+                                        <TableCell>{disciplina.codigo}</TableCell>
+                                        <TableCell>{depto?.nome}{area ? ` / ${area.nome}`: ''}</TableCell>
+                                        <TableCell>{disciplina.cargaHoraria}h</TableCell>
+                                    </TableRow>
+                                )
+                            })}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Justificativa (Opcional)</CardTitle>
+                    <CardDescription>
+                        Use este espaço para fornecer informações adicionais, como ordem de preferência ou outras observações.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Textarea 
+                        value={justificativa}
+                        onChange={(e) => setJustificativa(e.target.value)}
+                        placeholder="Ex: 1. Cálculo I, 2. Álgebra Linear..."
+                    />
+                </CardContent>
+            </Card>
+
+            <div className="flex justify-end">
+                <Button 
+                    size="lg"
+                    onClick={handleEnviar}
+                    disabled={selectedDisciplinas.size === 0}
+                >
+                    Enviar Preferências ({selectedDisciplinas.size})
+                </Button>
+            </div>
+        </div>
     );
 }
