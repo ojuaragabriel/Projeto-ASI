@@ -30,6 +30,7 @@ import {
   departamentos, 
   professores,
   alocacoesIniciais,
+  cursos,
   Departamento,
   Disciplina,
   Professor,
