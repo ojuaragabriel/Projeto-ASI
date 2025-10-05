@@ -5,8 +5,6 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   BookCheck,
-  ClipboardList,
-  GraduationCap,
   LogOut,
   User,
   ListChecks,
@@ -46,7 +44,7 @@ import {
 } from '@/components/ui/select';
 import { SEMESTERS } from '@/lib/mock-data';
 
-export default function DashboardLayout({
+export default function ProfessorLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -62,8 +60,8 @@ export default function DashboardLayout({
   };
 
   const navItems = [
-      { href: '/professor/preferencias', icon: ListChecks, label: 'Preferências' },
-      { href: '/professor/resultado', icon: AreaChart, label: 'Resultado' },
+      { href: '/professor/preferencias', icon: ListChecks, label: 'Escolher Matérias' },
+      { href: '/professor/resultado', icon: AreaChart, label: 'Resultado de Matérias' },
       { href: '/professor/minhas-materias', icon: BookCheck, label: 'Minhas Matérias' },
   ];
 

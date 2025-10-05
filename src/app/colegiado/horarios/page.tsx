@@ -8,10 +8,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { 
     horariosIniciais,
     disciplinas,
+    professores,
+    alocacoesIniciais,
     Horario,
     SEMESTERS
 } from '@/lib/mock-data';
-import DashboardLayout from '../../dashboard/layout';
 import { cn } from '@/lib/utils';
 import {
     Dialog,
@@ -22,13 +23,19 @@ import {
     DialogFooter
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
 
 const DIAS_SEMANA: Horario['dia'][] = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];
 const SLOTS_HORARIO: Horario['slot'][] = ['08:00-10:00', '10:00-12:00', '14:00-16:00', '16:00-18:00'];
 
-export default function GradeHorariosPage() {
+export default function GradeHorariosPage({ selectedSemester }: { selectedSemester: string }) {
     const [horarios, setHorarios] = React.useState<Horario[]>(horariosIniciais);
+    const [alocacoes, setAlocacoes] = React.useState(alocacoesIniciais);
     const [isFormOpen, setIsFormOpen] = React.useState(false);
+    
+    const horariosDoSemestre = horarios.filter(h => h.semestre === selectedSemester);
+    const alocacoesDoSemestre = alocacoes.filter(a => a.semestre === selectedSemester);
 
     const handleAddHorario = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -37,7 +44,7 @@ export default function GradeHorariosPage() {
             id: `h${Date.now()}`,
             disciplinaId: formData.get('disciplinaId') as string,
             turma: 'T1', // Mock
-            semestre: SEMESTERS[0], // Mock
+            semestre: selectedSemester,
             dia: formData.get('dia') as Horario['dia'],
             slot: formData.get('slot') as Horario['slot'],
         };
@@ -50,7 +57,7 @@ export default function GradeHorariosPage() {
     };
 
     const renderSlot = (dia: Horario['dia'], slot: Horario['slot']) => {
-        const horarioNoSlot = horarios.find(h => h.dia === dia && h.slot === slot && h.semestre === SEMESTERS[0]);
+        const horarioNoSlot = horariosDoSemestre.find(h => h.dia === dia && h.slot === slot);
         const disciplina = horarioNoSlot ? disciplinas.find(d => d.id === horarioNoSlot.disciplinaId) : null;
         
         return (
@@ -79,43 +86,96 @@ export default function GradeHorariosPage() {
         );
     };
 
+    const professorCarga = React.useMemo(() => {
+        const cargas: { [key: string]: { carga: number, min: number, max: number } } = {};
+        professores.forEach(p => {
+            cargas[p.id] = { carga: 0, min: p.minHoras, max: p.maxHoras };
+        });
+
+        alocacoesDoSemestre
+            .filter(a => a.professorId)
+            .forEach(a => {
+                const disciplina = disciplinas.find(d => d.id === a.disciplinaId);
+                if (disciplina && a.professorId && cargas[a.professorId]) {
+                    cargas[a.professorId].carga += disciplina.cargaHoraria;
+                }
+            });
+        return cargas;
+    }, [alocacoesDoSemestre]);
+
     return (
-        <DashboardLayout>
-            <div className="space-y-8">
-                <div className="flex justify-between items-start">
-                    <div>
-                        <h1 className="text-3xl font-bold">Grade de Horários</h1>
-                        <p className="text-muted-foreground">Gerencie os horários das disciplinas para o semestre 2025.1.</p>
-                    </div>
-                    <Button onClick={() => setIsFormOpen(true)}>
-                        <PlusCircle className="mr-2 h-4 w-4" />
-                        Adicionar Horário
-                    </Button>
+        <div className="space-y-8">
+            <div className="flex justify-between items-start">
+                <div>
+                    <h1 className="text-3xl font-bold">Horários e Alocação ({selectedSemester})</h1>
+                    <p className="text-muted-foreground">Gerencie os horários e a alocação de professores para as disciplinas.</p>
                 </div>
-                
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Semestre 2025.1</CardTitle>
-                        <CardDescription>Visualize e adicione aulas na grade semanal.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="grid grid-cols-6 gap-1">
-                            {/* Header Vazio */}
-                            <div /> 
-                            {/* Headers de Dia */}
-                            {DIAS_SEMANA.map(dia => <div key={dia} className="text-center font-bold p-2">{dia}</div>)}
-                            
-                            {/* Linhas de Horário */}
-                            {SLOTS_HORARIO.map(slot => (
-                                <React.Fragment key={slot}>
-                                    <div className="text-center font-bold p-2 flex items-center justify-center text-sm">{slot}</div>
-                                    {DIAS_SEMANA.map(dia => renderSlot(dia, slot))}
-                                </React.Fragment>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
             </div>
+            
+            <Tabs defaultValue="horarios">
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="horarios">Grade de Horários</TabsTrigger>
+                    <TabsTrigger value="alocacao">Alocação de Professores</TabsTrigger>
+                </TabsList>
+                <TabsContent value="horarios">
+                    <Card>
+                        <CardHeader>
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <CardTitle>Grade Semanal</CardTitle>
+                                    <CardDescription>Visualize e adicione aulas na grade semanal.</CardDescription>
+                                </div>
+                                <Button onClick={() => setIsFormOpen(true)}>
+                                    <PlusCircle className="mr-2 h-4 w-4" />
+                                    Adicionar Horário
+                                </Button>
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="grid grid-cols-6 gap-1">
+                                <div /> 
+                                {DIAS_SEMANA.map(dia => <div key={dia} className="text-center font-bold p-2">{dia}</div>)}
+                                
+                                {SLOTS_HORARIO.map(slot => (
+                                    <React.Fragment key={slot}>
+                                        <div className="text-center font-bold p-2 flex items-center justify-center text-sm">{slot}</div>
+                                        {DIAS_SEMANA.map(dia => renderSlot(dia, slot))}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+                <TabsContent value="alocacao">
+                     <Card>
+                        <CardHeader>
+                            <CardTitle>Carga Horária dos Professores</CardTitle>
+                            <CardDescription>Acompanhe a carga horária alocada em tempo real.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {professores.map(p => {
+                                const carga = professorCarga[p.id];
+                                const percentual = (carga.carga / carga.max) * 100;
+                                const isOverloaded = carga.carga > carga.max;
+                                const isUnderloaded = carga.carga < carga.min && carga.carga > 0;
+
+                                return (
+                                    <div key={p.id} className="p-4 border rounded-lg">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <p className="text-sm font-medium">{p.nome}</p>
+                                            <p className="text-sm text-muted-foreground">{carga.carga}h / {carga.max}h</p>
+                                        </div>
+                                        <Progress value={percentual} className="h-2" />
+                                        {isOverloaded && <p className="text-xs text-destructive mt-1">Carga horária máxima excedida.</p>}
+                                        {isUnderloaded && <p className="text-xs text-amber-500 mt-1">Abaixo da carga mínima.</p>}
+                                    </div>
+                                )
+                            })}
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+            </Tabs>
+
 
             <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
                 <DialogContent>
@@ -174,6 +234,6 @@ export default function GradeHorariosPage() {
                     </form>
                 </DialogContent>
             </Dialog>
-        </DashboardLayout>
+        </div>
     );
 }

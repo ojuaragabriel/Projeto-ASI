@@ -7,7 +7,7 @@ import { z } from 'zod';
 const LoginSchema = z.object({
   name: z.string().min(1, 'Nome de usuário é obrigatório.'),
   password: z.string().min(1, 'Senha é obrigatória.'),
-  role: z.enum(['professor', 'coordenador', 'colegiado']),
+  role: z.enum(['professor', 'colegiado', 'departamento']),
 });
 
 export async function authenticate(
@@ -25,8 +25,8 @@ export async function authenticate(
     
     const { name, role, password } = parsedData.data;
 
-    // MVP Login: any non-empty user/pass is valid
-    if (password !== 'admin') {
+    // MVP Login: user/pass 'admin' is valid for any role
+    if (password !== 'admin' || name !== 'admin') {
       return 'Usuário ou senha inválidos.';
     }
 

@@ -4,12 +4,11 @@ import * as React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  BookCheck,
-  Building,
   LogOut,
   User,
   BookCopy,
   Library,
+  CalendarCheck,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -63,6 +62,7 @@ export default function DashboardLayout({
   const navItems = [
     { href: '/colegiado/ofertas', icon: BookCopy, label: 'Ofertas do Curso' },
     { href: '/colegiado/disciplinas', icon: Library, label: 'Disciplinas por Depto.' },
+    { href: '/colegiado/horarios', icon: CalendarCheck, label: 'Horários e Alocação' },
   ];
 
   const roleName = 'Colegiado';

@@ -4,15 +4,8 @@ import * as React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  BookCheck,
-  ClipboardList,
-  GraduationCap,
-  Home,
   LogOut,
   User,
-  LayoutDashboard,
-  Shield,
-  Building,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -47,6 +40,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { SEMESTERS } from '@/lib/mock-data';
+import { getNavItems } from '@/lib/nav-items';
 
 export default function DashboardLayout({
   children,
@@ -63,33 +57,9 @@ export default function DashboardLayout({
     router.push('/login');
   };
 
-  const navItems = React.useMemo(() => {
-    if (user?.role === 'professor') {
-      return [
-        { href: '/professor', icon: GraduationCap, label: 'Minhas Disciplinas' },
-        { href: '/professor/horarios', icon: ClipboardList, label: 'Meus Horários' },
-      ];
-    }
-    if (user?.role === 'colegiado') {
-      return [
-        { href: '/colegiado', icon: BookCheck, label: 'Alocação de Disciplinas' },
-        { href: '/colegiado/horarios', icon: ClipboardList, label: 'Grade de Horários' },
-      ];
-    }
-    if (user?.role === 'departamento') {
-      return [
-        { href: '/departamento', icon: LayoutDashboard, label: 'Dashboard do Departamento' },
-        { href: '/departamento/relatorios', icon: Shield, label: 'Relatórios' },
-      ];
-    }
-    return [];
-  }, [user?.role]);
-
-  const roleName = {
-    professor: 'Professor',
-    colegiado: 'Colegiado',
-    departamento: 'Departamento',
-  };
+  const navItems = getNavItems(user?.role);
+  
+  const roleName = user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : '';
 
   return (
     <SidebarProvider>
@@ -106,9 +76,9 @@ export default function DashboardLayout({
           <SidebarMenu>
             {navItems.map((item) => (
               <SidebarMenuItem key={item.href}>
-                <Link href={item.href} legacyBehavior passHref>
+                <Link href={item.href}>
                   <SidebarMenuButton
-                    isActive={pathname === item.href}
+                    isActive={pathname.startsWith(item.href)}
                     tooltip={{ children: item.label, side: 'right' }}
                   >
                     <item.icon />
@@ -138,7 +108,7 @@ export default function DashboardLayout({
                 <div className="text-left group-data-[collapsible=icon]:hidden">
                   <p className="font-medium text-sm truncate">{user?.name}</p>
                   <p className="text-xs text-muted-foreground">
-                    {user?.role ? roleName[user.role] : ''}
+                    {roleName}
                   </p>
                 </div>
               </Button>
@@ -184,7 +154,7 @@ export default function DashboardLayout({
           </div>
         </header>
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          {children}
+          {React.isValidElement(children) ? React.cloneElement(children, { selectedSemester } as { selectedSemester: string }) : children}
         </main>
       </SidebarInset>
     </SidebarProvider>

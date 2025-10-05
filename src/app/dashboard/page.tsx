@@ -9,9 +9,7 @@ export default function DashboardRootPage() {
   useEffect(() => {
     if (!isLoading && user?.role) {
       // Redirect to the role's specific root page
-      if (user.role === 'professor') redirect('/professor');
-      if (user.role === 'coordenador') redirect('/coordenador');
-      if (user.role === 'colegiado') redirect('/colegiado');
+      redirect(`/${user.role}`);
     }
   }, [user, isLoading]);
 

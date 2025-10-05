@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const protectedRoutes = ['/dashboard', '/professor', '/coordenador', '/colegiado'];
+const protectedRoutes = ['/dashboard', '/professor', '/colegiado', '/departamento'];
 const publicRoutes = ['/login'];
 
 export function middleware(request: NextRequest) {

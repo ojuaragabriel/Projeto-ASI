@@ -4,12 +4,11 @@ import * as React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  BookCheck,
-  ClipboardList,
-  GraduationCap,
   LogOut,
   User,
-  LayoutGrid,
+  Book,
+  Users,
+  FileText
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -61,12 +60,12 @@ export default function DashboardLayout({
   };
 
   const navItems = [
-    { href: '/coordenador/disciplinas', icon: BookCheck, label: 'Disciplinas' },
-    { href: '/coordenador/horarios', icon: ClipboardList, label: 'Horários' },
-    { href: '/coordenador/alocacao', icon: LayoutGrid, label: 'Alocação' },
+    { href: '/departamento/disciplinas', icon: Book, label: 'Catálogo de Disciplinas' },
+    { href: '/departamento/professores', icon: Users, label: 'Professores & Carga' },
+    { href: '/departamento/relatorios', icon: FileText, label: 'Relatórios' },
   ];
 
-  const roleName = 'Coordenador';
+  const roleName = 'Departamento';
 
   return (
     <SidebarProvider>
