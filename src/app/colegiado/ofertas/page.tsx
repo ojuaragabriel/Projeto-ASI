@@ -15,7 +15,6 @@ import {
   Disciplina,
   Oferta,
 } from '@/lib/mock-data';
-import DashboardLayout from '../layout';
 
 export default function OfertasPage({ selectedSemester }: { selectedSemester: string }) {
     const [disciplinas, setDisciplinas] = React.useState<Disciplina[]>(allDisciplinas);
@@ -51,67 +50,65 @@ export default function OfertasPage({ selectedSemester }: { selectedSemester: st
     };
 
     return (
-        <DashboardLayout>
-            <div className="space-y-8">
-                <div>
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <h1 className="text-3xl font-bold">Ofertas do Curso ({selectedSemester})</h1>
-                            <p className="text-muted-foreground">
-                                Gerencie as disciplinas ofertadas para o curso de {meuCurso?.nome}.
-                            </p>
-                        </div>
-                        <Button onClick={handleSaveChanges}>
-                            Salvar Oferta ({disciplinasOfertadasIds.size})
-                        </Button>
+        <div className="space-y-8">
+            <div>
+                <div className="flex justify-between items-start">
+                    <div>
+                        <h1 className="text-3xl font-bold">Ofertas do Curso ({selectedSemester})</h1>
+                        <p className="text-muted-foreground">
+                            Gerencie as disciplinas ofertadas para o curso de {meuCurso?.nome}.
+                        </p>
                     </div>
+                    <Button onClick={handleSaveChanges}>
+                        Salvar Oferta ({disciplinasOfertadasIds.size})
+                    </Button>
                 </div>
-                
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Checklist de Disciplinas</CardTitle>
-                        <CardDescription>Selecione as disciplinas que serão ofertadas neste semestre.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-[50px]">Ofertada</TableHead>
-                                    <TableHead>Código</TableHead>
-                                    <TableHead>Disciplina</TableHead>
-                                    <TableHead>Departamento de Origem</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {disciplinas.map((disciplina) => {
-                                    const depto = departamentos.find(d => d.id === disciplina.departamentoId);
-                                    const isFromMyCourseDept = depto?.id === meuCurso?.departamentoId;
-
-                                    return (
-                                        <TableRow key={disciplina.id} data-state={disciplinasOfertadasIds.has(disciplina.id) ? 'selected' : ''}>
-                                            <TableCell>
-                                                <Checkbox
-                                                    checked={disciplinasOfertadasIds.has(disciplina.id)}
-                                                    onCheckedChange={() => handleToggleOferta(disciplina.id)}
-                                                    aria-label={`Selecionar ${disciplina.nome}`}
-                                                />
-                                            </TableCell>
-                                            <TableCell className="font-mono">{disciplina.codigo}</TableCell>
-                                            <TableCell className="font-medium">{disciplina.nome}</TableCell>
-                                            <TableCell>
-                                                {depto?.nome}
-                                                {!isFromMyCourseDept && (
-                                                    <Badge variant="outline" className="ml-2">Depto. Externo</Badge>
-                                                )}
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
             </div>
-        </DashboardLayout>
+            
+            <Card>
+                <CardHeader>
+                    <CardTitle>Checklist de Disciplinas</CardTitle>
+                    <CardDescription>Selecione as disciplinas que serão ofertadas neste semestre.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[50px]">Ofertada</TableHead>
+                                <TableHead>Código</TableHead>
+                                <TableHead>Disciplina</TableHead>
+                                <TableHead>Departamento de Origem</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {disciplinas.map((disciplina) => {
+                                const depto = departamentos.find(d => d.id === disciplina.departamentoId);
+                                const isFromMyCourseDept = depto?.id === meuCurso?.departamentoId;
+
+                                return (
+                                    <TableRow key={disciplina.id} data-state={disciplinasOfertadasIds.has(disciplina.id) ? 'selected' : ''}>
+                                        <TableCell>
+                                            <Checkbox
+                                                checked={disciplinasOfertadasIds.has(disciplina.id)}
+                                                onCheckedChange={() => handleToggleOferta(disciplina.id)}
+                                                aria-label={`Selecionar ${disciplina.nome}`}
+                                            />
+                                        </TableCell>
+                                        <TableCell className="font-mono">{disciplina.codigo}</TableCell>
+                                        <TableCell className="font-medium">{disciplina.nome}</TableCell>
+                                        <TableCell>
+                                            {depto?.nome}
+                                            {!isFromMyCourseDept && (
+                                                <Badge variant="outline" className="ml-2">Depto. Externo</Badge>
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+        </div>
     );
 }
